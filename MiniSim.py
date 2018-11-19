@@ -27,8 +27,8 @@ def main():
     print("\nMembers:")
     print("Francis Paul Amadeo")
     print("Steven Mac\n\n")
-    print("Reading in instruction file:")
 
+   """"
     #START TEST
     var = ["05","AB","AC", "19", "161"]
 
@@ -36,6 +36,25 @@ def main():
         print (hexToBin(var[i]))
     print("FINISHED")
     #END TEST
+    """""
+
+    #VARIABLES:
+    Nlines = 0  # Number of lines
+    instr =[] #Instructions will be here
+
+    print("Reading in instruction file...")
+    inFile = open("i_mem.txt", "r")
+    outFile = open("output.txt", "w")
+
+    for line in iFile:
+        if (line == "\n"):
+            continue
+        line = line.replace("\n", "")
+        instr.append(hexToBin(line))  # Copy all instruction into a list
+        Nlines += 1
+
+    print("...finished reading in instruction file")
+    print("\nSimulating...")
     exit()
 
 
