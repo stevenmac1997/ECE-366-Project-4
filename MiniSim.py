@@ -3,17 +3,17 @@ def hexToBin (line):
     for i in range(0, len(line)):
         print("Line: " + line[len(line) - i -1] + "\t# of chars:"+ str(len(line)))
 
-        if(line[len(line) - i -1] == 'A'):
+        if(line[len(line) - i -1] == 'A' or line[len(line) - i -1] == 'a'):
             newLine += 10 * (16 ** i)
-        elif(line[len(line) - i -1] == 'B'):
+        elif(line[len(line) - i -1] == 'B' or line[len(line) - i -1] == 'b'):
             newLine += 11 * (16 ** i)
-        elif (line[len(line) - i -1] == 'C'):
+        elif (line[len(line) - i -1] == 'C' or line[len(line) - i -1] == 'c'):
             newLine += 12 * (16 ** i)
-        elif (line[len(line) - i -1] == 'D'):
+        elif (line[len(line) - i -1] == 'D' or line[len(line) - i -1] == 'd'):
             newLine += 13 * (16 ** i)
-        elif (line[len(line) - i -1] == 'E'):
+        elif (line[len(line) - i -1] == 'E' or line[len(line) - i -1] == 'e'):
             newLine += 14 * (16 ** i)
-        elif (line[len(line) - i -1] == 'F'):
+        elif (line[len(line) - i -1] == 'F' or line[len(line) - i -1] == 'f'):
             newLine += 15 * (16 ** i)
         else:
             newLine += int(line[len(line) - i -1]) * (16**i)
@@ -22,96 +22,123 @@ def hexToBin (line):
     return newLine.rjust(32, '0')
 
 def simulate(instr, output):
-    DIC = 0
-    Reg = [0, 0, 0, 0, 0, 0, 0, 0]
-    PC = 0
+    DIC = 0 #Dynamic Instruction Count
+    Reg = [0, 0, 0, 0, 0, 0, 0, 0] #Registers $0 to $7
+    Mem = [0] * 512 #Memory Addresses, each initialized at 0
+    PC = 0 #Program Counter
     finished = False
-    
     while(not(finished)):
             line = instr[PC]
+            print(line)
             DIC += 1
-            print (Reg,)
-            if(line[0:5] == "000000"):
-                if(line[26:31] == "100000"):
+            if(line[0:6] == "000000"):
+                if(line[26:32] == "100000"):
                   function = "add"
-                  rs = int(line[6:10],2)
-                  rt = int(line[11:15],2)
-                  rd = int(line[15:19],2)
-                  Reg[rd]=Reg[rs]+Reg[rt]
+                  rs = int(line[6:11],2)
+                  rt = int(line[11:16],2)
+                  rd = int(line[16:21],2)
+                  print (rt, rd, rs)
+                  Reg[rd] = Reg[rs] + Reg[rt]
                   PC += 1
-                  print (function," ",rd,",",rs,",",rt)
-                elif(line[26:31] == "100010"):
+                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str (rt))
+                elif(line[26:32] == "100010"):
                   function = "sub"
-                  rs = int(line[6:10],2)
-                  rt = int(line[11:15],2)
-                  rd = int(line[15:19],2)
+                  rs = int(line[6:11],2)
+                  rt = int(line[11:16],2)
+                  rd = int(line[16:21],2)
                   Reg[rd]=Reg[rs]-Reg[rt]
                   PC += 1
                   print (function," ",rd,",",rs,",",rt)
-                elif(line[26:31] == "100110"):
+                elif(line[26:32] == "100110"):
                   function = "xor"
-                  rs = int(line[6:10],2)
-                  rt = int(line[11:15],2)
-                  rd = int(line[15:19],2)
+                  rs = int(line[6:11],2)
+                  rt = int(line[11:16],2)
+                  rd = int(line[16:21],2)
                   Reg[rd]=Reg[rs]^Reg[rt]
                   PC += 1
                   print (function," ",rd,",",rs,",",rt)
-                elif(line[26:31] == "101010"):
+                elif(line[26:32] == "101010"):
                   function = "slt"
-                  rs = int(line[6:10],2)
-                  rt = int(line[11:15],2)
-                  rd = int(line[15:19],2)
+                  rs = int(line[6:11],2)
+                  rt = int(line[11:16],2)
+                  rd = int(line[16:21],2)
                   if (Reg[rs] < Reg[rt]):
                        Reg[rd]=1
                   else:
                        Reg[rd]=0
                   PC += 1
                   print (function," ",rd,",",rs,",",rt)
-            elif(line[0:5] == "001000"):
+            elif(line[0:6] == "001000"):
                 function = "addi"
-                rs = int(line[6:10],2)
-                rt = int(line[11:15],2)
-                imm = int(line[16:31],2)
+                rs = int(line[6:11],2)
+                rt = int(line[11:16],2)
+                imm = int(line[16:32],2)
+                if(line[16] == "1"):
+                    imm = imm - 65536
+                print(imm)
                 Reg[rt]=Reg[rs]+imm
                 PC +=1
                 print (function," ",rt,",",rs,",",imm)
-            elif(line[0:5] == "000100"):
+            elif(line[0:6] == "000100"):
                 function = "beq"
-                rs = int(line[6:10],2)
-                rt = int(line[11:15],2)
-                imm = int(line[16:31],2)
+                rs = int(line[6:11],2)
+                rt = int(line[11:16],2)
+                imm = int(line[16:32],2)
+                if (line[16] == "1"):
+                    imm = imm - 65536
                 if(Reg[rs] == Reg[rt]):
-                    PC += imm
+                    addThis = imm + 1
                 else:
-                    PC += 1      
-                print (function," ",rt,",",rs,",",imm)
-            elif(line[0:5] == "000101"):
+                    addThis = 1
+                if(addThis != 0):
+                    PC += addThis
+                else:
+                    finished = True
+                print (str(function) + " " + str(rt) + "," + str(rs) + "," + str(imm))
+            elif(line[0:6] == "000101"):
                 function = "bne"
-                rs = int(line[6:10],2)
-                rt = int(line[11:15],2)
-                imm = int(line[16:31],2)
+                rs = int(line[6:11],2)
+                rt = int(line[11:16],2)
+                imm = int(line[16:32],2)
+                if(line[16] == "1"):
+                    imm = imm - 65536
                 if (Reg[rs] == Reg[rt]):
-                  PC += 1
+                    addThis = imm + 1
                 else:
-                  PC += imm                 
-                print (function," ",rt,",",rs,",",imm)
-            elif(line[0:5] == "100011"):
+                    addThis = 1
+                if (addThis != 0):
+                    PC += addThis
+                else:
+                    finished = True
+                print (str(function) + " " + str(rt) + "," + str(rs) +"," + str(imm))
+            elif(line[0:6] == "100011"):
                 function = "lw"
-                rs = int(line[6:10],2)
-                rt = int(line[11:15],2)
-                imm = int(line[16:31],2)
+                rs = int(line[6:11],2)
+                rt = int(line[11:16],2)
+                imm = int(line[16:32],2)
+                if (line[16] == "1"):
+                    imm = imm - 65536
+                print(imm)
+                imm = imm - 8192
+
                 Reg[rt]=Mem[Reg[rs]+imm]
                 PC +=1
                 print (function," ",rt,",",rs,",",imm)
-            elif(line[0:5] == "101011"):
+            elif(line[0:6] == "101011"):
                 function = "sw"
-                rs = int(line[6:10],2)
-                rt = int(line[11:15],2)
-                imm = int(line[16:31],2)
+                rs = int(line[6:11],2)
+                rt = int(line[11:16],2)
+                imm = int(line[16:32],2)
+                #if (line[16] == "1"):
+                #    imm = imm - 65536
+                print(imm)
+                imm = imm - 8192
                 Mem[Reg[rs]+imm]=Reg[rt]
                 PC +=1
                 print (function," ",rt,",",rs,",",imm)
-                                        
+    print("\n\n\nReg: " + str(Reg))
+    print("PC: " + str(PC + 1))
+    print("DIC: " + str(DIC))
 def main():
     print("ECE366 Fall 2018: MIPS Mini Assembler")
     print("\nMembers:")
@@ -130,13 +157,14 @@ def main():
         if (line == "\n"):
             continue
         line = line.replace("\n", "")
+        line = line.replace("0x", "")
         instr.append(hexToBin(line))  # Copy all instruction into a list
         Nlines += 1
 
     print("...finished reading in instruction file")
     print("\nSimulating...")
     simulate(instr, outFile)
-
+    print("\nSimulation done")
     inFile.close()
     outFile.close()
 
