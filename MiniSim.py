@@ -28,6 +28,8 @@ def simulate(instr, output):
     PC = 0 #Program Counter
     finished = False
     while(not(finished)):
+
+            #input()
             line = instr[PC]
             #print(line)
             DIC += 1
@@ -39,7 +41,7 @@ def simulate(instr, output):
                   rd = int(line[16:21],2)
                   Reg[rd] = Reg[rs] + Reg[rt]
                   PC += 1
-                  #print (str(function) + " " + str(rd) + "," + str(rs) + "," + str (rt))
+                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str (rt))
                 elif(line[26:32] == "100010"):
                   function = "sub"
                   rs = int(line[6:11],2)
@@ -47,7 +49,7 @@ def simulate(instr, output):
                   rd = int(line[16:21],2)
                   Reg[rd]=Reg[rs]-Reg[rt]
                   PC += 1
-                  #print (function," ",rd,",",rs,",",rt)
+                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
                 elif(line[26:32] == "100110"):
                   function = "xor"
                   rs = int(line[6:11],2)
@@ -55,7 +57,7 @@ def simulate(instr, output):
                   rd = int(line[16:21],2)
                   Reg[rd]=Reg[rs]^Reg[rt]
                   PC += 1
-                  #print (function," ",rd,",",rs,",",rt)
+                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
                 elif(line[26:32] == "101010"):
                   function = "slt"
                   rs = int(line[6:11],2)
@@ -66,7 +68,7 @@ def simulate(instr, output):
                   else:
                        Reg[rd]=0
                   PC += 1
-                  #print (function," ",rd,",",rs,",",rt)
+                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
             elif(line[0:6] == "001000"):
                 function = "addi"
                 rs = int(line[6:11],2)
@@ -77,7 +79,7 @@ def simulate(instr, output):
                 #print(imm)
                 Reg[rt]=Reg[rs]+imm
                 PC +=1
-                #print (function," ",rt,",",rs,",",imm)
+                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "000100"):
                 function = "beq"
                 rs = int(line[6:11],2)
@@ -93,7 +95,7 @@ def simulate(instr, output):
                     PC += addThis
                 else:
                     finished = True
-                #print (str(function) + " " + str(rt) + "," + str(rs) + "," + str(imm))
+                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "000101"):
                 function = "bne"
                 rs = int(line[6:11],2)
@@ -101,7 +103,7 @@ def simulate(instr, output):
                 imm = int(line[16:32],2)
                 if(line[16] == "1"):
                     imm = imm - 65536
-                if (Reg[rs] == Reg[rt]):
+                if (Reg[rs] != Reg[rt]):
                     addThis = imm + 1
                 else:
                     addThis = 1
@@ -109,7 +111,7 @@ def simulate(instr, output):
                     PC += addThis
                 else:
                     finished = True
-                #print (str(function) + " " + str(rt) + "," + str(rs) +"," + str(imm))
+                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "100011"):
                 function = "lw"
                 rs = int(line[6:11],2)
@@ -117,25 +119,29 @@ def simulate(instr, output):
                 imm = int(line[16:32],2)
                 if (line[16] == "1"):
                     imm = imm - 65536
-                imm = imm - 8192
-
-                Reg[rt]=Mem[Reg[rs]+imm]
+                imm = imm - 8192 #0x2000
+                #imm = imm / 4
+                Reg[rt]=Mem[(Reg[rs]/4)+imm]
                 PC +=1
-                #print (function," ",rt,",",rs,",",imm)
+                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "101011"):
                 function = "sw"
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
-                #if (line[16] == "1"):
-                #    imm = imm - 65536
-                imm = imm - 8192
-                Mem[Reg[rs]+imm]=Reg[rt]
+                if (line[16] == "1"):
+                    imm = imm - 65536
+                imm = imm - 8192 #0x2000
+
+                Mem[(Reg[rs]/4)+imm]=Reg[rt]
                 PC +=1
-                #print (function," ",rt,",",rs,",",imm)
-    print("\nReg: " + str(Reg))
-    print("PC: " + str(PC + 1))
-    print("DIC: " + str(DIC))
+                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+
+            print("\nReg: " + str(Reg))
+            print("PC: " + str(PC + 1))
+            print("DIC: " + str(DIC))
+            print("Mem: " + str(Mem))
+            print("")
     output.write("Reg: " + str(Reg))
     output.write("\nPC : " + str(PC+1))
     output.write("\nDIC: " + str(DIC))
