@@ -1,0 +1,6 @@
+ Hex to Binary
+ Skip 0x in the front
+ Expand to 1~7 registers
+ Have Reg [0] = 0 Const
+ DIC +1=
+ 
