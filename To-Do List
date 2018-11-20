@@ -1,6 +1,9 @@
  Hex to Binary
+ R-Type Op-Code = 00000 and Unique Function
  Skip 0x in the front
  Expand to 1~7 registers
  Have Reg [0] = 0 Const
  DIC +1=
+ Cache Simuator
+ Extra Credit: Cache input
  
