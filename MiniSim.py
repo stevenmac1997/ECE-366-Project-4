@@ -21,22 +21,14 @@ def hexToBin (line):
     newLine = format(int(newLine), "b")
     return newLine.rjust(32, '0')
 
-
+def simulate(instr, output):
+    reg = [0, 0, 0, 0, 0, 0, 0, 0]
+    
 def main():
     print("ECE366 Fall 2018: MIPS Mini Assembler")
     print("\nMembers:")
     print("Francis Paul Amadeo")
     print("Steven Mac\n\n")
-
-   """"
-    #START TEST
-    var = ["05","AB","AC", "19", "161"]
-
-    for i in range(0,5):
-        print (hexToBin(var[i]))
-    print("FINISHED")
-    #END TEST
-    """""
 
     #VARIABLES:
     Nlines = 0  # Number of lines
@@ -46,7 +38,7 @@ def main():
     inFile = open("i_mem.txt", "r")
     outFile = open("output.txt", "w")
 
-    for line in iFile:
+    for line in inFile:
         if (line == "\n"):
             continue
         line = line.replace("\n", "")
@@ -55,6 +47,11 @@ def main():
 
     print("...finished reading in instruction file")
     print("\nSimulating...")
+    simulate(instr, outFile)
+
+    inFile.close()
+    outFile.close()
+
     exit()
 
 
