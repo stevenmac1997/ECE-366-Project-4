@@ -22,8 +22,96 @@ def hexToBin (line):
     return newLine.rjust(32, '0')
 
 def simulate(instr, output):
-    reg = [0, 0, 0, 0, 0, 0, 0, 0]
+    DIC = 0
+    Reg = [0, 0, 0, 0, 0, 0, 0, 0]
+    PC = 0
+    finished = False
     
+    while(not(finished)):
+            line = instr[PC]
+            DIC += 1
+            print (Reg,)
+            if(line[0:5] == "000000"):
+                if(line[26:31] == "100000"):
+                  function = "add"
+                  rs = int(line[6:10],2)
+                  rt = int(line[11:15],2)
+                  rd = int(line[15:19],2)
+                  Reg[rd]=Reg[rs]+Reg[rt]
+                  PC += 1
+                  print (function," ",rd,",",rs,",",rt)
+                elif(line[26:31] == "100010"):
+                  function = "sub"
+                  rs = int(line[6:10],2)
+                  rt = int(line[11:15],2)
+                  rd = int(line[15:19],2)
+                  Reg[rd]=Reg[rs]-Reg[rt]
+                  PC += 1
+                  print (function," ",rd,",",rs,",",rt)
+                elif(line[26:31] == "100110"):
+                  function = "xor"
+                  rs = int(line[6:10],2)
+                  rt = int(line[11:15],2)
+                  rd = int(line[15:19],2)
+                  Reg[rd]=Reg[rs]^Reg[rt]
+                  PC += 1
+                  print (function," ",rd,",",rs,",",rt)
+                elif(line[26:31] == "101010"):
+                  function = "slt"
+                  rs = int(line[6:10],2)
+                  rt = int(line[11:15],2)
+                  rd = int(line[15:19],2)
+                  if (Reg[rs] < Reg[rt]):
+                       Reg[rd]=1
+                  else:
+                       Reg[rd]=0
+                  PC += 1
+                  print (function," ",rd,",",rs,",",rt)
+            elif(line[0:5] == "001000"):
+                function = "addi"
+                rs = int(line[6:10],2)
+                rt = int(line[11:15],2)
+                imm = int(line[16:31],2)
+                Reg[rt]=Reg[rs]+imm
+                PC +=1
+                print (function," ",rt,",",rs,",",imm)
+            elif(line[0:5] == "000100"):
+                function = "beq"
+                rs = int(line[6:10],2)
+                rt = int(line[11:15],2)
+                imm = int(line[16:31],2)
+                if(Reg[rs] == Reg[rt]):
+                    PC += imm
+                else:
+                    PC += 1      
+                print (function," ",rt,",",rs,",",imm)
+            elif(line[0:5] == "000101"):
+                function = "bne"
+                rs = int(line[6:10],2)
+                rt = int(line[11:15],2)
+                imm = int(line[16:31],2)
+                if (Reg[rs] == Reg[rt]):
+                  PC += 1
+                else:
+                  PC += imm                 
+                print (function," ",rt,",",rs,",",imm)
+            elif(line[0:5] == "100011"):
+                function = "lw"
+                rs = int(line[6:10],2)
+                rt = int(line[11:15],2)
+                imm = int(line[16:31],2)
+                Reg[rt]=Mem[Reg[rs]+imm]
+                PC +=1
+                print (function," ",rt,",",rs,",",imm)
+            elif(line[0:5] == "101011"):
+                function = "sw"
+                rs = int(line[6:10],2)
+                rt = int(line[11:15],2)
+                imm = int(line[16:31],2)
+                Mem[Reg[rs]+imm]=Reg[rt]
+                PC +=1
+                print (function," ",rt,",",rs,",",imm)
+                                        
 def main():
     print("ECE366 Fall 2018: MIPS Mini Assembler")
     print("\nMembers:")
