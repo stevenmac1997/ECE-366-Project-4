@@ -1,3 +1,8 @@
 Reg: [0, 2, 32, 0, -39, 32, 0, 0]
 PC : 18
 DIC: 93
+Multicycle Simulation Results: 
+# Three Cycles: 90
+# Four Cycles: 124
+# Five Cycles: 40
+Total Cycles: 254

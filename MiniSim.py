@@ -26,6 +26,13 @@ def simulate(instr, output):
     Reg = [0, 0, 0, 0, 0, 0, 0, 0] #Registers $0 to $7
     Mem = [0] * 512 #Memory Addresses, each initialized at 0
     PC = 0 #Program Counter
+    tot_cyc = 0 #total number of cycles in multicycle
+    three_cyc = 0 #counts the three cycle instructions
+    four_cyc = 0 #counts the four cycle instructions
+    five_cyc = 0 #counts the five cycle instructions
+    lw_use = 0 
+    compute_brance_compare = 0
+    branch_taken_flush = 0    
     finished = False
     while(not(finished)):
 
@@ -34,6 +41,8 @@ def simulate(instr, output):
             #print(line)
             DIC += 1
             if(line[0:6] == "000000"):
+                tot_cyc += 4
+                four_cyc += 4
                 if(line[26:32] == "100000"):
                   function = "add"
                   rs = int(line[6:11],2)
@@ -82,6 +91,8 @@ def simulate(instr, output):
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "000100"):
                 function = "beq"
+                three_cyc += 3
+                tot_cyc += 3
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
@@ -98,6 +109,8 @@ def simulate(instr, output):
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "000101"):
                 function = "bne"
+                three_cyc += 3
+                tot_cyc += 3
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
@@ -114,6 +127,8 @@ def simulate(instr, output):
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "100011"):
                 function = "lw"
+                five_cyc  += 5
+                tot_cyc += 5
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
@@ -121,19 +136,23 @@ def simulate(instr, output):
                     imm = imm - 65536
                 imm = imm - 8192 #0x2000
                 #imm = imm / 4
-                Reg[rt]=Mem[(Reg[rs]/4)+imm]
+                dummyA=0.25
+                Reg[rt]=Mem[round(Reg[rs]*dummyA)+imm]
                 PC +=1
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "101011"):
                 function = "sw"
+                four_cyc += 4
+                tot_cyc += 4
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
                 if (line[16] == "1"):
                     imm = imm - 65536
                 imm = imm - 8192 #0x2000
+                dummyA=0.25
 
-                Mem[(Reg[rs]/4)+imm]=Reg[rt]
+                Mem[round(Reg[rs]*dummyA)+imm]=Reg[rt]
                 PC +=1
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
 
@@ -142,9 +161,22 @@ def simulate(instr, output):
             print("DIC: " + str(DIC))
             print("Mem: " + str(Mem))
             print("")
+            print("\nMulticycle Simulation Results: ")
+            print("Three Cycles: " + str(three_cyc))
+            print("Four Cycles: " + str(four_cyc))
+            print("Five Cycles: " + str(five_cyc))
+            print("Total Cycles: " + str(tot_cyc))
+            print("")
     output.write("Reg: " + str(Reg))
     output.write("\nPC : " + str(PC+1))
     output.write("\nDIC: " + str(DIC))
+    output.write("\nMulticycle Simulation Results: ")
+    output.write("\n# Three Cycles: " + str(three_cyc))
+    output.write("\n# Four Cycles: " + str(four_cyc))
+    output.write("\n# Five Cycles: " + str(five_cyc))
+    output.write("\nTotal Cycles: " + str(tot_cyc))
+    
+    
 
 
 def main():
