@@ -31,7 +31,7 @@ def simulate(instr, output):
     four_cyc = 0 #counts the four cycle instructions
     five_cyc = 0 #counts the five cycle instructions
     lw_use = 0 
-    compute_brance_compare = 0
+    compute_branch_compare = 0
     branch_taken_flush = 0    
     finished = False
     while(not(finished)):
