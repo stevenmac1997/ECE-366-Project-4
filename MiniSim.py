@@ -30,9 +30,13 @@ def simulate(instr, output):
     three_cyc = 0 #counts the three cycle instructions
     four_cyc = 0 #counts the four cycle instructions
     five_cyc = 0 #counts the five cycle instructions
-    lw_use = 0 
-    compute_branch_compare = 0
-    branch_taken_flush = 0    
+    tot_cyc2 = 5 #Total Cycles for Pipeline
+    rs_check = 0 # Holds previous rs
+    rt_check = 0 # holds previous rt
+    rd_check = 0 # holds previous rd
+    lw_use = 0  # counts lw-use stalls
+    compute_branch_compare = 0 # counts compute_brance compares
+    branch_taken_flush = 0 # counts branch flushes
     finished = False
     while(not(finished)):
 
@@ -40,44 +44,48 @@ def simulate(instr, output):
             line = instr[PC]
             #print(line)
             DIC += 1
+            tot_cyc2 += 1
+            
             if(line[0:6] == "000000"):
                 tot_cyc += 4
                 four_cyc += 4
+                rs = int(line[6:11],2)
+                rt = int(line[11:16],2)
+                rd = int(line[16:21],2)
+                if ((rd_check == rs or rd_check == rt) and function == "lw"):
+                  lw_use +=1
+                  tot_cyc2 +=1
+                else:
+                  rs_check = rs
+                  rt_check = rt
+                  rd_check = rd
                 if(line[26:32] == "100000"):
                   function = "add"
-                  rs = int(line[6:11],2)
-                  rt = int(line[11:16],2)
-                  rd = int(line[16:21],2)
                   Reg[rd] = Reg[rs] + Reg[rt]
                   PC += 1
                   print (str(function) + " " + str(rd) + "," + str(rs) + "," + str (rt))
+                  function = "compare"
                 elif(line[26:32] == "100010"):
                   function = "sub"
-                  rs = int(line[6:11],2)
-                  rt = int(line[11:16],2)
-                  rd = int(line[16:21],2)
                   Reg[rd]=Reg[rs]-Reg[rt]
                   PC += 1
                   print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
+                  function = "compare"
                 elif(line[26:32] == "100110"):
                   function = "xor"
-                  rs = int(line[6:11],2)
-                  rt = int(line[11:16],2)
-                  rd = int(line[16:21],2)
                   Reg[rd]=Reg[rs]^Reg[rt]
                   PC += 1
                   print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
+                  function = "compare"
                 elif(line[26:32] == "101010"):
                   function = "slt"
-                  rs = int(line[6:11],2)
-                  rt = int(line[11:16],2)
-                  rd = int(line[16:21],2)
                   if (Reg[rs] < Reg[rt]):
                        Reg[rd]=1
                   else:
                        Reg[rd]=0
                   PC += 1
                   print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
+                  function = "compare"
             elif(line[0:6] == "001000"):
                 function = "addi"
                 rs = int(line[6:11],2)
@@ -89,17 +97,26 @@ def simulate(instr, output):
                 Reg[rt]=Reg[rs]+imm
                 PC +=1
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+                function = "compare"
             elif(line[0:6] == "000100"):
-                function = "beq"
                 three_cyc += 3
                 tot_cyc += 3
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
+                if (function == "compare" and (rd_check == rs or rd_check == rt)):
+                    compute_branch_compare += 1
+                    tot_cyc2 += 1
+                else:
+                    rs_check = rs
+                    rt_check = rt
+                function = "beq"
                 if (line[16] == "1"):
                     imm = imm - 65536
                 if(Reg[rs] == Reg[rt]):
                     addThis = imm + 1
+                    branch_taken_flush += 1
+                    tot_cyc2 += 1
                 else:
                     addThis = 1
                 if(addThis != 0):
@@ -108,16 +125,25 @@ def simulate(instr, output):
                     finished = True
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "000101"):
-                function = "bne"
+                
                 three_cyc += 3
                 tot_cyc += 3
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
+                if (function == "compare" and (rd_check == rs or rd_check == rt)):
+                    compute_branch_compare += 1
+                    tot_cyc2 += 1
+                else:
+                    rs_check = rs
+                    rd_check = rt
+                function = "bne"
                 if(line[16] == "1"):
                     imm = imm - 65536
                 if (Reg[rs] != Reg[rt]):
                     addThis = imm + 1
+                    branch_taken_flush += 1
+                    tot_cyc2 += 1
                 else:
                     addThis = 1
                 if (addThis != 0):
@@ -166,6 +192,10 @@ def simulate(instr, output):
             print("Four Cycles: " + str(four_cyc))
             print("Five Cycles: " + str(five_cyc))
             print("Total Cycles: " + str(tot_cyc))
+            print("\nPipline Simulation Results: ")
+            print("lw-use: " + str(lw_use))
+            print("compute-branch compare: " + str(compute_branch_compare))
+            print("branch taken flush: " + str(branch_taken_flush))
             print("")
     output.write("Reg: " + str(Reg))
     output.write("\nPC : " + str(PC+1))
