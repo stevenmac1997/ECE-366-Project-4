@@ -37,6 +37,11 @@ def simulate(instr, output):
     lw_use = 0  # counts lw-use stalls
     compute_branch_compare = 0 # counts compute_brance compares
     branch_taken_flush = 0 # counts branch flushes
+    tot_delay = 0 #Total numbers of delays
+    forward = 0 #
+    forward_check_rs = [0,0,0,0,0,0,0] #forward check for rs
+    forward_check_rt = [0,0,0,0,0,0,0] #forward check for rt
+    forward_check_rd = [0,0,0,0,0,0,0] #forward check for rd
     finished = False
     while(not(finished)):
 
@@ -53,8 +58,9 @@ def simulate(instr, output):
                 rt = int(line[11:16],2)
                 rd = int(line[16:21],2)
                 if ((rd_check == rs or rd_check == rt) and function == "lw"):
-                  lw_use +=1
-                  tot_cyc2 +=1
+                  lw_use += 1
+                  tot_cyc2 += 1
+                  tot_delay += 1
                 else:
                   rs_check = rs
                   rt_check = rt
@@ -116,7 +122,8 @@ def simulate(instr, output):
                 if(Reg[rs] == Reg[rt]):
                     addThis = imm + 1
                     branch_taken_flush += 1
-                    tot_cyc2 += 1
+                    tot_cyc2 += 3
+                    tot_delay += 3
                 else:
                     addThis = 1
                 if(addThis != 0):
@@ -143,7 +150,8 @@ def simulate(instr, output):
                 if (Reg[rs] != Reg[rt]):
                     addThis = imm + 1
                     branch_taken_flush += 1
-                    tot_cyc2 += 1
+                    tot_cyc2 += 3
+                    tot_delay += 3
                 else:
                     addThis = 1
                 if (addThis != 0):
@@ -196,7 +204,8 @@ def simulate(instr, output):
             print("lw-use: " + str(lw_use))
             print("compute-branch compare: " + str(compute_branch_compare))
             print("branch taken flush: " + str(branch_taken_flush))
-            print("Total Cycles: " + str(tot_cyc2))
+            print("Total Delays: " +str(tot_delay))
+            print("Total Cycles: " + str(tot_cyc2)) 
             print("")
     output.write("Reg: " + str(Reg))
     output.write("\nPC : " + str(PC+1))
