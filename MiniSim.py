@@ -172,31 +172,41 @@ def simulate(instr, output):
                 imm = imm - 65536
             imm = imm - 8192  # 0x2000
             # imm = imm / 4
-            addr = round(Reg[rs] * 0.25) + imm
+            addr = int(round(Reg[rs] * 0.25)) + imm
             Reg[rt] = Mem[addr]
             PC += 1
+            print(str(addr))
             print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
 
             # 3.)
             # A.) DM4W2B => 16 bits: T T T T T T T T T T T T T | I | O O
             # B.) DM2W4B => 16 bits: T T T T T T T T T T T T T | I I | O
-            addr = format(int(addr + 8192), "b")
-            addr.rjust(16, '0')
+            # Add 0x2000 to the address and change it to binary
+            if (line[16] == "1"):
+                imm += 65536
+            print(str(Reg[rs]) + "<- Reg[" + str(rs) + "]\timm ->" + str(imm))
+            addr = Reg[rs] + imm + 8192
+            print(str(addr))
+            addr = format(int(addr), "b")
+            addr = "00" + addr
+            print(addr)
+
+            # Get the tag from the address
+            currTagDM = addr[0:14]
 
             # A.)
-            currTagDM = addr[0:16]
-            if (DMBlkI4W[int(addr[16])] == currTagDM):
-                DMHit4W++
+            if (DMBlkI4W[int(addr[14])] == currTagDM):
+                DMHit4W += 1
             else:
-                DMMiss4W++
-                DMBlkI4W[int(addr[16])] = currTagDM
+                DMMiss4W += 1
+                DMBlkI4W[int(addr[14])] = currTagDM
 
             #B.)
-            if (DMBlkI2W[int(addr[16:18], 2)] == currTagDM):
-                DMHit2W++
+            if (DMBlkI2W[int(addr[14:16], 2)] == currTagDM):
+                DMHit2W += 1
             else:
-                DMMiss2W++
-                DMBlkI2W[int(addr[16:18], 2)] = currTagDM
+                DMMiss2W += 1
+                DMBlkI2W[int(addr[14:16], 2)] = currTagDM
 
         elif (line[0:6] == "101011"):
             function = "sw"
@@ -210,26 +220,35 @@ def simulate(instr, output):
             imm = imm - 8192  # 0x2000
             dummyA = 0.25
 
-            Mem[round(Reg[rs] * dummyA) + imm] = Reg[rt]
+            Mem[int(round(Reg[rs] * dummyA)) + imm] = Reg[rt]
             PC += 1
             print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
 
-        print("\nReg: " + str(Reg))
-        print("PC: " + str(PC + 1))
-        print("DIC: " + str(DIC))
-        print("Mem: " + str(Mem))
-        print("")
-        print("\nMulticycle Simulation Results: ")
-        print("Three Cycles: " + str(three_cyc))
-        print("Four Cycles: " + str(four_cyc))
-        print("Five Cycles: " + str(five_cyc))
-        print("Total Cycles: " + str(tot_cyc))
-        ###NOT WRITING YET###
-        print("\nPipeline Simulation Results: ")
-        print("lw-use: " + str(lw_use))
-        print("compute-branch compare: " + str(compute_branch_compare))
-        print("branch taken flush: " + str(branch_taken_flush))
-        print("")
+    print("\nReg: " + str(Reg))
+    print("PC: " + str(PC + 1))
+    print("DIC: " + str(DIC))
+    print("Mem: " + str(Mem))
+    print("")
+    print("\nMulticycle Simulation Results: ")
+    print("Three Cycles: " + str(three_cyc))
+    print("Four Cycles: " + str(four_cyc))
+    print("Five Cycles: " + str(five_cyc))
+    print("Total Cycles: " + str(tot_cyc))
+    ###NOT WRITING YET###
+    print("\nPipeline Simulation Results: ")
+    print("lw-use: " + str(lw_use))
+    print("compute-branch compare: " + str(compute_branch_compare))
+    print("branch taken flush: " + str(branch_taken_flush))
+    print("")
+    print("Direct mapped cache, block size of 4 words, a total of 2 blocks:")
+    print("HITS:     " + str(DMHit4W))
+    print("MISS:     " + str(DMMiss4W))
+    print("HIT Rate: " + str(DMHit4W / (DMHit4W + DMMiss4W)))
+    print("\nDirect mapped cache, block size of 2 words, a total of 4 blocks:")
+    print("HITS:     " + str(DMHit2W))
+    print("MISS:     " + str(DMMiss2W))
+    print("HIT Rate: " + str(DMHit2W / (DMHit2W + DMMiss2W)))
+
     output.write("Reg: " + str(Reg))
     output.write("\nPC : " + str(PC + 1))
     output.write("\nDIC: " + str(DIC))
