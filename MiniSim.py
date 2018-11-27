@@ -1,233 +1,243 @@
-def hexToBin (line):
+def hexToBin(line):
     newLine = 0
     for i in range(0, len(line)):
-        #print("Line: " + line[len(line) - i -1] + "\t# of chars:"+ str(len(line)))
+        # print("Line: " + line[len(line) - i -1] + "\t# of chars:"+ str(len(line)))
 
-        if(line[len(line) - i -1] == 'A' or line[len(line) - i -1] == 'a'):
+        if (line[len(line) - i - 1] == 'A' or line[len(line) - i - 1] == 'a'):
             newLine += 10 * (16 ** i)
-        elif(line[len(line) - i -1] == 'B' or line[len(line) - i -1] == 'b'):
+        elif (line[len(line) - i - 1] == 'B' or line[len(line) - i - 1] == 'b'):
             newLine += 11 * (16 ** i)
-        elif (line[len(line) - i -1] == 'C' or line[len(line) - i -1] == 'c'):
+        elif (line[len(line) - i - 1] == 'C' or line[len(line) - i - 1] == 'c'):
             newLine += 12 * (16 ** i)
-        elif (line[len(line) - i -1] == 'D' or line[len(line) - i -1] == 'd'):
+        elif (line[len(line) - i - 1] == 'D' or line[len(line) - i - 1] == 'd'):
             newLine += 13 * (16 ** i)
-        elif (line[len(line) - i -1] == 'E' or line[len(line) - i -1] == 'e'):
+        elif (line[len(line) - i - 1] == 'E' or line[len(line) - i - 1] == 'e'):
             newLine += 14 * (16 ** i)
-        elif (line[len(line) - i -1] == 'F' or line[len(line) - i -1] == 'f'):
+        elif (line[len(line) - i - 1] == 'F' or line[len(line) - i - 1] == 'f'):
             newLine += 15 * (16 ** i)
         else:
-            newLine += int(line[len(line) - i -1]) * (16**i)
-    #print(str(newLine))
+            newLine += int(line[len(line) - i - 1]) * (16 ** i)
+    # print(str(newLine))
     newLine = format(int(newLine), "b")
     return newLine.rjust(32, '0')
 
+
 def simulate(instr, output):
-    DIC = 0 #Dynamic Instruction Count
-    Reg = [0, 0, 0, 0, 0, 0, 0, 0] #Registers $0 to $7
-    Mem = [0] * 512 #Memory Addresses, each initialized at 0
-    PC = 0 #Program Counter
-    tot_cyc = 0 #total number of cycles in multicycle
-    three_cyc = 0 #counts the three cycle instructions
-    four_cyc = 0 #counts the four cycle instructions
-    five_cyc = 0 #counts the five cycle instructions
-    tot_cyc2 = 5 #Total Cycles for Pipeline
-    rs_check = 0 # Holds previous rs
-    rt_check = 0 # holds previous rt
-    rd_check = 0 # holds previous rd
+    DIC = 0  # Dynamic Instruction Count
+    Reg = [0, 0, 0, 0, 0, 0, 0, 0]  # Registers $0 to $7
+    Mem = [0] * 512  # Memory Addresses, each initialized at 0
+    PC = 0  # Program Counter
+    tot_cyc = 0  # total number of cycles in multicycle
+    three_cyc = 0  # counts the three cycle instructions
+    four_cyc = 0  # counts the four cycle instructions
+    five_cyc = 0  # counts the five cycle instructions
+    tot_cyc2 = 5  # Total Cycles for Pipeline
+    rs_check = 0  # Holds previous rs
+    rt_check = 0  # holds previous rt
+    rd_check = 0  # holds previous rd
     lw_use = 0  # counts lw-use stalls
-    compute_branch_compare = 0 # counts compute_brance compares
-    branch_taken_flush = 0 # counts branch flushes
-    DMHit4W = 0   # Hits for the blocks, with size of 4 words, a total of 2 blocks. 0/1
+    compute_branch_compare = 0  # counts compute_brance compares
+    branch_taken_flush = 0  # counts branch flushes
+    DMHit4W = 0  # Hits for the blocks, with size of 4 words, a total of 2 blocks. 0/1
     DMMiss4W = 0  # Misses for the blocks, with size of 4 words, a total of 2 blocks. 0/1
-    DMBlkI4W = [-1, -1] # The tags saved for the blocks, with size of 4 words, a total of 2 blocks. 0/1
-                  # DM4W2B => 16 bits: T T T T T T T T T T T T T | I | O O
-    DMHit2W = 0   # Hits for the blocks, with size of 2 words, a total of 4 blocks. 00/01/10/11
+    DMBlkI4W = ["", ""]  # The tags saved for the blocks, with size of 4 words, a total of 2 blocks. 0/1
+    # DM4W2B => 16 bits: T T T T T T T T T T T T T | I | O O
+    DMHit2W = 0  # Hits for the blocks, with size of 2 words, a total of 4 blocks. 00/01/10/11
     DMMiss2W = 0  # Misses for the blocks, with size of 2 words, a total of 4 blocks. 00/01/10/11
-    DMBlkI2W = []
-                  # DM2W4B => 16 bits: T T T T T T T T T T T T T | I I | O
+    DMBlkI2W = ["", "", "", ""] # The tags saved for the blocks, with size of 4 words, a total of 2 blocks. 00/01/10/11
+    # DM2W4B => 16 bits: T T T T T T T T T T T T T | I I | O
     currTagDM = " "
     finished = False
-    while(not(finished)):
+    while (not (finished)):
 
-            #input()
-            line = instr[PC]
-            #print(line)
-            DIC += 1
-            tot_cyc2 += 1
-            
-            if(line[0:6] == "000000"):
-                tot_cyc += 4
-                four_cyc += 4
-                rs = int(line[6:11],2)
-                rt = int(line[11:16],2)
-                rd = int(line[16:21],2)
-                if ((rd_check == rs or rd_check == rt) and function == "lw"):
-                  lw_use +=1
-                  tot_cyc2 +=1
-                else:
-                  rs_check = rs
-                  rt_check = rt
-                  rd_check = rd
-                if(line[26:32] == "100000"):
-                  function = "add"
-                  Reg[rd] = Reg[rs] + Reg[rt]
-                  PC += 1
-                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str (rt))
-                  function = "compare"
-                elif(line[26:32] == "100010"):
-                  function = "sub"
-                  Reg[rd]=Reg[rs]-Reg[rt]
-                  PC += 1
-                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
-                  function = "compare"
-                elif(line[26:32] == "100110"):
-                  function = "xor"
-                  Reg[rd]=Reg[rs]^Reg[rt]
-                  PC += 1
-                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
-                  function = "compare"
-                elif(line[26:32] == "101010"):
-                  function = "slt"
-                  if (Reg[rs] < Reg[rt]):
-                       Reg[rd]=1
-                  else:
-                       Reg[rd]=0
-                  PC += 1
-                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
-                  function = "compare"
-            elif(line[0:6] == "001000"):
-                function = "addi"
-                rs = int(line[6:11],2)
-                rt = int(line[11:16],2)
-                imm = int(line[16:32],2)
-                if(line[16] == "1"):
-                    imm = imm - 65536
-                #print(imm)
-                Reg[rt]=Reg[rs]+imm
-                PC +=1
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+        # input()
+        line = instr[PC]
+        # print(line)
+        DIC += 1
+        tot_cyc2 += 1
+
+        if (line[0:6] == "000000"):
+            tot_cyc += 4
+            four_cyc += 4
+            rs = int(line[6:11], 2)
+            rt = int(line[11:16], 2)
+            rd = int(line[16:21], 2)
+            if ((rd_check == rs or rd_check == rt) and function == "lw"):
+                lw_use += 1
+                tot_cyc2 += 1
+            else:
+                rs_check = rs
+                rt_check = rt
+                rd_check = rd
+            if (line[26:32] == "100000"):
+                function = "add"
+                Reg[rd] = Reg[rs] + Reg[rt]
+                PC += 1
+                print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
                 function = "compare"
-            elif(line[0:6] == "000100"):
-                three_cyc += 3
-                tot_cyc += 3
-                rs = int(line[6:11],2)
-                rt = int(line[11:16],2)
-                imm = int(line[16:32],2)
-                if (function == "compare" and (rd_check == rs or rd_check == rt)):
-                    compute_branch_compare += 1
-                    tot_cyc2 += 1
+            elif (line[26:32] == "100010"):
+                function = "sub"
+                Reg[rd] = Reg[rs] - Reg[rt]
+                PC += 1
+                print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
+                function = "compare"
+            elif (line[26:32] == "100110"):
+                function = "xor"
+                Reg[rd] = Reg[rs] ^ Reg[rt]
+                PC += 1
+                print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
+                function = "compare"
+            elif (line[26:32] == "101010"):
+                function = "slt"
+                if (Reg[rs] < Reg[rt]):
+                    Reg[rd] = 1
                 else:
-                    rs_check = rs
-                    rt_check = rt
-                function = "beq"
-                if (line[16] == "1"):
-                    imm = imm - 65536
-                if(Reg[rs] == Reg[rt]):
-                    addThis = imm + 1
-                    branch_taken_flush += 1
-                    tot_cyc2 += 1
-                else:
-                    addThis = 1
-                if(addThis != 0):
-                    PC += addThis
-                else:
-                    finished = True
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
-            elif(line[0:6] == "000101"):
-                
-                three_cyc += 3
-                tot_cyc += 3
-                rs = int(line[6:11],2)
-                rt = int(line[11:16],2)
-                imm = int(line[16:32],2)
-                if (function == "compare" and (rd_check == rs or rd_check == rt)):
-                    compute_branch_compare += 1
-                    tot_cyc2 += 1
-                else:
-                    rs_check = rs
-                    rd_check = rt
-                function = "bne"
-                if(line[16] == "1"):
-                    imm = imm - 65536
-                if (Reg[rs] != Reg[rt]):
-                    addThis = imm + 1
-                    branch_taken_flush += 1
-                    tot_cyc2 += 1
-                else:
-                    addThis = 1
-                if (addThis != 0):
-                    PC += addThis
-                else:
-                    finished = True
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
-            elif(line[0:6] == "100011"):
-                function = "lw"
-                five_cyc  += 5
-                tot_cyc += 5
-                rs = int(line[6:11],2)
-                rt = int(line[11:16],2)
-                imm = int(line[16:32],2)
-                if (line[16] == "1"):
-                    imm = imm - 65536
-                imm = imm - 8192 #0x2000
-                #imm = imm / 4
-                addr = round(Reg[rs]*0.25) + imm
-                Reg[rt]=Mem[addr]
-                PC +=1
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+                    Reg[rd] = 0
+                PC += 1
+                print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
+                function = "compare"
+        elif (line[0:6] == "001000"):
+            function = "addi"
+            rs = int(line[6:11], 2)
+            rt = int(line[11:16], 2)
+            imm = int(line[16:32], 2)
+            if (line[16] == "1"):
+                imm = imm - 65536
+            # print(imm)
+            Reg[rt] = Reg[rs] + imm
+            PC += 1
+            print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+            function = "compare"
+        elif (line[0:6] == "000100"):
+            three_cyc += 3
+            tot_cyc += 3
+            rs = int(line[6:11], 2)
+            rt = int(line[11:16], 2)
+            imm = int(line[16:32], 2)
+            if (function == "compare" and (rd_check == rs or rd_check == rt)):
+                compute_branch_compare += 1
+                tot_cyc2 += 1
+            else:
+                rs_check = rs
+                rt_check = rt
+            function = "beq"
+            if (line[16] == "1"):
+                imm = imm - 65536
+            if (Reg[rs] == Reg[rt]):
+                addThis = imm + 1
+                branch_taken_flush += 1
+                tot_cyc2 += 1
+            else:
+                addThis = 1
+            if (addThis != 0):
+                PC += addThis
+            else:
+                finished = True
+            print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+        elif (line[0:6] == "000101"):
 
-                #3.)
-                # A.) DM4W2B => 16 bits: T T T T T T T T T T T T T | I | O O
-                # B.) DM2W4B => 16 bits: T T T T T T T T T T T T T | I I | O
-                addr = format(int(addr + 8192), "b")
-                addr.rjust(16, '0')
+            three_cyc += 3
+            tot_cyc += 3
+            rs = int(line[6:11], 2)
+            rt = int(line[11:16], 2)
+            imm = int(line[16:32], 2)
+            if (function == "compare" and (rd_check == rs or rd_check == rt)):
+                compute_branch_compare += 1
+                tot_cyc2 += 1
+            else:
+                rs_check = rs
+                rd_check = rt
+            function = "bne"
+            if (line[16] == "1"):
+                imm = imm - 65536
+            if (Reg[rs] != Reg[rt]):
+                addThis = imm + 1
+                branch_taken_flush += 1
+                tot_cyc2 += 1
+            else:
+                addThis = 1
+            if (addThis != 0):
+                PC += addThis
+            else:
+                finished = True
+            print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+        elif (line[0:6] == "100011"):
+            function = "lw"
+            five_cyc += 5
+            tot_cyc += 5
+            rs = int(line[6:11], 2)
+            rt = int(line[11:16], 2)
+            imm = int(line[16:32], 2)
+            if (line[16] == "1"):
+                imm = imm - 65536
+            imm = imm - 8192  # 0x2000
+            # imm = imm / 4
+            addr = round(Reg[rs] * 0.25) + imm
+            Reg[rt] = Mem[addr]
+            PC += 1
+            print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
 
-                #A.)
-                currTagDM = addr[0:16]
-                if (addr[16] == "0"):
+            # 3.)
+            # A.) DM4W2B => 16 bits: T T T T T T T T T T T T T | I | O O
+            # B.) DM2W4B => 16 bits: T T T T T T T T T T T T T | I I | O
+            addr = format(int(addr + 8192), "b")
+            addr.rjust(16, '0')
 
+            # A.)
+            currTagDM = addr[0:16]
+            if (DMBlkI4W[int(addr[16])] == currTagDM):
+                DMHit4W++
+            else:
+                DMMiss4W++
+                DMBlkI4W[int(addr[16])] = currTagDM
 
-            elif(line[0:6] == "101011"):
-                function = "sw"
-                four_cyc += 4
-                tot_cyc += 4
-                rs = int(line[6:11],2)
-                rt = int(line[11:16],2)
-                imm = int(line[16:32],2)
-                if (line[16] == "1"):
-                    imm = imm - 65536
-                imm = imm - 8192 #0x2000
-                dummyA=0.25
+            #B.)
+            if (DMBlkI2W[int(addr[16:18], 2)] == currTagDM):
+                DMHit2W++
+            else:
+                DMMiss2W++
+                DMBlkI2W[int(addr[16:18], 2)] = currTagDM
 
-                Mem[round(Reg[rs]*dummyA)+imm]=Reg[rt]
-                PC +=1
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+        elif (line[0:6] == "101011"):
+            function = "sw"
+            four_cyc += 4
+            tot_cyc += 4
+            rs = int(line[6:11], 2)
+            rt = int(line[11:16], 2)
+            imm = int(line[16:32], 2)
+            if (line[16] == "1"):
+                imm = imm - 65536
+            imm = imm - 8192  # 0x2000
+            dummyA = 0.25
 
-            print("\nReg: " + str(Reg))
-            print("PC: " + str(PC + 1))
-            print("DIC: " + str(DIC))
-            print("Mem: " + str(Mem))
-            print("")
-            print("\nMulticycle Simulation Results: ")
-            print("Three Cycles: " + str(three_cyc))
-            print("Four Cycles: " + str(four_cyc))
-            print("Five Cycles: " + str(five_cyc))
-            print("Total Cycles: " + str(tot_cyc))
-            print("\nPipeline Simulation Results: ")
-            print("lw-use: " + str(lw_use))
-            print("compute-branch compare: " + str(compute_branch_compare))
-            print("branch taken flush: " + str(branch_taken_flush))
-            print("")
+            Mem[round(Reg[rs] * dummyA) + imm] = Reg[rt]
+            PC += 1
+            print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+
+        print("\nReg: " + str(Reg))
+        print("PC: " + str(PC + 1))
+        print("DIC: " + str(DIC))
+        print("Mem: " + str(Mem))
+        print("")
+        print("\nMulticycle Simulation Results: ")
+        print("Three Cycles: " + str(three_cyc))
+        print("Four Cycles: " + str(four_cyc))
+        print("Five Cycles: " + str(five_cyc))
+        print("Total Cycles: " + str(tot_cyc))
+        ###NOT WRITING YET###
+        print("\nPipeline Simulation Results: ")
+        print("lw-use: " + str(lw_use))
+        print("compute-branch compare: " + str(compute_branch_compare))
+        print("branch taken flush: " + str(branch_taken_flush))
+        print("")
     output.write("Reg: " + str(Reg))
-    output.write("\nPC : " + str(PC+1))
+    output.write("\nPC : " + str(PC + 1))
     output.write("\nDIC: " + str(DIC))
     output.write("\nMulticycle Simulation Results: ")
     output.write("\n# Three Cycles: " + str(three_cyc))
     output.write("\n# Four Cycles: " + str(four_cyc))
     output.write("\n# Five Cycles: " + str(five_cyc))
     output.write("\nTotal Cycles: " + str(tot_cyc))
-    
-    
 
 
 def main():
@@ -236,9 +246,9 @@ def main():
     print("Francis Paul Amadeo")
     print("Steven Mac\n\n")
 
-    #VARIABLES:
+    # VARIABLES:
     Nlines = 0  # Number of lines
-    instr =[] #Instructions will be here
+    instr = []  # Instructions will be here
 
     print("Reading in instruction file...")
     inFile = open("i_mem.txt", "r")
