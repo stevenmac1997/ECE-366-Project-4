@@ -196,6 +196,7 @@ def simulate(instr, output):
             print("lw-use: " + str(lw_use))
             print("compute-branch compare: " + str(compute_branch_compare))
             print("branch taken flush: " + str(branch_taken_flush))
+            print("Total Cycles: " + str(tot_cyc2))
             print("")
     output.write("Reg: " + str(Reg))
     output.write("\nPC : " + str(PC+1))
