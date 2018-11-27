@@ -37,6 +37,15 @@ def simulate(instr, output):
     lw_use = 0  # counts lw-use stalls
     compute_branch_compare = 0 # counts compute_brance compares
     branch_taken_flush = 0 # counts branch flushes
+    DMHit4W = 0   # Hits for the blocks, with size of 4 words, a total of 2 blocks. 0/1
+    DMMiss4W = 0  # Misses for the blocks, with size of 4 words, a total of 2 blocks. 0/1
+    DMBlkI4W = [-1, -1] # The tags saved for the blocks, with size of 4 words, a total of 2 blocks. 0/1
+                  # DM4W2B => 16 bits: T T T T T T T T T T T T T | I | O O
+    DMHit2W = 0   # Hits for the blocks, with size of 2 words, a total of 4 blocks. 00/01/10/11
+    DMMiss2W = 0  # Misses for the blocks, with size of 2 words, a total of 4 blocks. 00/01/10/11
+    DMBlkI2W = []
+                  # DM2W4B => 16 bits: T T T T T T T T T T T T T | I I | O
+    currTagDM = " "
     finished = False
     while(not(finished)):
 
@@ -162,10 +171,22 @@ def simulate(instr, output):
                     imm = imm - 65536
                 imm = imm - 8192 #0x2000
                 #imm = imm / 4
-                dummyA=0.25
-                Reg[rt]=Mem[round(Reg[rs]*dummyA)+imm]
+                addr = round(Reg[rs]*0.25) + imm
+                Reg[rt]=Mem[addr]
                 PC +=1
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+
+                #3.)
+                # A.) DM4W2B => 16 bits: T T T T T T T T T T T T T | I | O O
+                # B.) DM2W4B => 16 bits: T T T T T T T T T T T T T | I I | O
+                addr = format(int(addr + 8192), "b")
+                addr.rjust(16, '0')
+
+                #A.)
+                currTagDM = addr[0:16]
+                if (addr[16] == "0"):
+
+
             elif(line[0:6] == "101011"):
                 function = "sw"
                 four_cyc += 4
@@ -192,7 +213,7 @@ def simulate(instr, output):
             print("Four Cycles: " + str(four_cyc))
             print("Five Cycles: " + str(five_cyc))
             print("Total Cycles: " + str(tot_cyc))
-            print("\nPipline Simulation Results: ")
+            print("\nPipeline Simulation Results: ")
             print("lw-use: " + str(lw_use))
             print("compute-branch compare: " + str(compute_branch_compare))
             print("branch taken flush: " + str(branch_taken_flush))
