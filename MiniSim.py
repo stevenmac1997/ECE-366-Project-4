@@ -31,17 +31,17 @@ def simulate(instr, output):
     four_cyc = 0 #counts the four cycle instructions
     five_cyc = 0 #counts the five cycle instructions
     tot_cyc2 = 5 #Total Cycles for Pipeline
-    rs_check = 0 # Holds previous rs
-    rt_check = 0 # holds previous rt
+    #rs_check = 0 # Holds previous rs
+    #rt_check = 0 # holds previous rt
     rd_check = 0 # holds previous rd
     lw_use = 0  # counts lw-use stalls
     compute_branch_compare = 0 # counts compute_brance compares
     branch_taken_flush = 0 # counts branch flushes
     tot_delay = 0 #Total numbers of delays
     forward = 0 #
-    forward_check_rs = [0,0,0,0,0,0,0] #forward check for rs
-    forward_check_rt = [0,0,0,0,0,0,0] #forward check for rt
-    forward_check_rd = [0,0,0,0,0,0,0] #forward check for rd
+    #forward_check_rs = [0,0,0,0,0,0,0] #forward check for rs
+    #forward_check_rt = [0,0,0,0,0,0,0] #forward check for rt
+    forward_check_rd = [0,0,0,0,0,0,0,0] #forward check for rd
     finished = False
     while(not(finished)):
 
@@ -50,10 +50,10 @@ def simulate(instr, output):
             #print(line)
             DIC += 1
             tot_cyc2 += 1
-            
+            #forward[int(line[16:21],2)] = reg[rint(line[16:21],2)]
             if(line[0:6] == "000000"):
                 tot_cyc += 4
-                four_cyc += 4
+                four_cyc += 1
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 rd = int(line[16:21],2)
@@ -62,8 +62,8 @@ def simulate(instr, output):
                   tot_cyc2 += 1
                   tot_delay += 1
                 else:
-                  rs_check = rs
-                  rt_check = rt
+                  ##rs_check = rs
+                  ##rt_check = rt
                   rd_check = rd
                 if(line[26:32] == "100000"):
                   function = "add"
@@ -94,6 +94,8 @@ def simulate(instr, output):
                   function = "compare"
             elif(line[0:6] == "001000"):
                 function = "addi"
+                four_cyc += 1
+                tot_cyc += 4
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
@@ -105,7 +107,7 @@ def simulate(instr, output):
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
                 function = "compare"
             elif(line[0:6] == "000100"):
-                three_cyc += 3
+                three_cyc += 1
                 tot_cyc += 3
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
@@ -113,9 +115,9 @@ def simulate(instr, output):
                 if (function == "compare" and (rd_check == rs or rd_check == rt)):
                     compute_branch_compare += 1
                     tot_cyc2 += 1
-                else:
-                    rs_check = rs
-                    rt_check = rt
+                #else:
+                    ##rs_check = rs
+                    ##rt_check = rt
                 function = "beq"
                 if (line[16] == "1"):
                     imm = imm - 65536
@@ -133,7 +135,7 @@ def simulate(instr, output):
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "000101"):
                 
-                three_cyc += 3
+                three_cyc += 1
                 tot_cyc += 3
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
@@ -141,9 +143,9 @@ def simulate(instr, output):
                 if (function == "compare" and (rd_check == rs or rd_check == rt)):
                     compute_branch_compare += 1
                     tot_cyc2 += 1
-                else:
-                    rs_check = rs
-                    rd_check = rt
+                #else:
+                    ##rs_check = rs
+                    ##rt_check = rt
                 function = "bne"
                 if(line[16] == "1"):
                     imm = imm - 65536
@@ -161,7 +163,7 @@ def simulate(instr, output):
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "100011"):
                 function = "lw"
-                five_cyc  += 5
+                five_cyc  += 1
                 tot_cyc += 5
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
@@ -176,7 +178,7 @@ def simulate(instr, output):
                 print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
             elif(line[0:6] == "101011"):
                 function = "sw"
-                four_cyc += 4
+                four_cyc += 1
                 tot_cyc += 4
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
@@ -200,7 +202,7 @@ def simulate(instr, output):
             print("Four Cycles: " + str(four_cyc))
             print("Five Cycles: " + str(five_cyc))
             print("Total Cycles: " + str(tot_cyc))
-            print("\nPipline Simulation Results: ")
+            print("\nPipeline Simulation Results: ")
             print("lw-use: " + str(lw_use))
             print("compute-branch compare: " + str(compute_branch_compare))
             print("branch taken flush: " + str(branch_taken_flush))
