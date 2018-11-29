@@ -40,12 +40,23 @@ def simulate(instr, output):
     branch_taken_flush = 0  # counts branch flushes
     DMHit4W = 0  # Hits for the blocks, with size of 4 words, a total of 2 blocks. 0/1
     DMMiss4W = 0  # Misses for the blocks, with size of 4 words, a total of 2 blocks. 0/1
-    DMBlkI4W = ["", ""]  # The tags saved for the blocks, with size of 4 words, a total of 2 blocks. 0/1
-    # DM4W2B => 16 bits: T T T T T T T T T T T T T | I | O O
+    DMBlkI4W = ["",""]  # The tags saved for the blocks, with size of 4 words, a total of 2 blocks. 0/1
+    # DM4W2B => 16 bits: T T T T T T T T T T T | I | O O | B B
     DMHit2W = 0  # Hits for the blocks, with size of 2 words, a total of 4 blocks. 00/01/10/11
     DMMiss2W = 0  # Misses for the blocks, with size of 2 words, a total of 4 blocks. 00/01/10/11
     DMBlkI2W = ["", "", "", ""] # The tags saved for the blocks, with size of 4 words, a total of 2 blocks. 00/01/10/11
-    # DM2W4B => 16 bits: T T T T T T T T T T T T T | I I | O
+    # DM2W4B => 16 bits: T T T T T T T T T T T | I I | O | B B
+    FAHit2W = 0  # Hits for the sets, with size of 2 words, a total of 8 blocks. 00/01/10/11
+    FAMiss2W = 0  # Misses for the sets, with size of 2 words, a total of 8 blocks. 00/01/10/11
+    FABlkI2W = ["", "", "", ""]  # The tags saved for the sets, with size of 2 words, a total of 8 blocks. 00/01/10/11
+    FALRU = []
+    i = 0
+    # FA2W4B => 16 bits: T T T T T T T T T T T | I I | O | B B
+    SAHit2W = 0  # Hits for the sets, with size of 2 words, a total of 8 blocks. 00/01/10/11
+    SAMiss2W = 0  # Misses for the sets, with size of 2 words, a total of 8 blocks. 00/01/10/11
+    SASetI2W = ["", "", "", "", "", "", "", ""]  # The tags saved for the sets, with size of 2 words, a total of 8 blocks. 00/01/10/11
+    SALRU = 1
+    # SA2W4B => 16 bits: T T T T T T T T T T T | I I | O | B B
     currTagDM = " "
     finished = False
     while (not (finished)):
@@ -179,8 +190,10 @@ def simulate(instr, output):
             print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
 
             # 3.)
-            # A.) DM4W2B => 16 bits: T T T T T T T T T T T T T | I | O O
-            # B.) DM2W4B => 16 bits: T T T T T T T T T T T T T | I I | O
+            # A.) DM4W2B => 16 bits: T T T T T T T T T T T | I | O O | B B
+            # B.) DM2W4B => 16 bits: T T T T T T T T T T T | I I | O | B B
+            # C.) FA2W4B => 16 bits: T T T T T T T T T T T T T | O | B B
+            # D.) SA2W4S => 16 bits: T T T T T T T T T T T | I I | O | B B
             # Add 0x2000 to the address and change it to binary
             if (line[16] == "1"):
                 imm += 65536
@@ -192,21 +205,66 @@ def simulate(instr, output):
             print(addr)
 
             # Get the tag from the address
-            currTagDM = addr[0:14]
-
+            currTagDM = addr[0:12]
+            currTagFA = addr[0:12]
             # A.)
-            if (DMBlkI4W[int(addr[14])] == currTagDM):
+            if (DMBlkI4W[int(addr[12])] == currTagDM):
                 DMHit4W += 1
             else:
                 DMMiss4W += 1
-                DMBlkI4W[int(addr[14])] = currTagDM
+                DMBlkI4W[int(addr[12])] = currTagDM
 
-            #B.)
-            if (DMBlkI2W[int(addr[14:16], 2)] == currTagDM):
+            # B.)
+            if (DMBlkI2W[int(addr[12:14], 2)] == currTagDM):
                 DMHit2W += 1
             else:
                 DMMiss2W += 1
-                DMBlkI2W[int(addr[14:16], 2)] = currTagDM
+                DMBlkI2W[int(addr[12:14], 2)] = currTagDM
+            # C.)
+            missed = True
+            for i in range(0,4):
+                if (FABlkI2W[i] == currTagFA):
+                    if(FABlkI2W[i] != ""):
+                        FAHit2W += 1
+                        missed = False
+                    print("FABlkI2W[i] => " + str(FABlkI2W[i]))
+                    print("######BREAK#######")
+                    break
+            if (missed):
+                i = 0
+                while(FABlkI2W[i] != ""):
+                    i += 1
+                if(i<4):
+                    FABlkI2W[i] = currTagFA
+                    FALRU.append(i)
+                else:
+                    FABlkI2W[FALRU[0]] = currTagFA
+                    i = FALRU.pop(0)
+                    FALRU.append(i)
+
+            # D.)
+            missed = True
+            if (SASetI2W[2 * (int(addr[12:14],2))] == currTagDM):
+                if(SASetI2W[int(addr[12:14], 2)] != ""):
+                    SAHit2W += 1
+                    missed = False
+            elif (SASetI2W[2 * (int(addr[12:14],2)) + 1] == currTagDM):
+                if (SASetI2W[2 * (int(addr[12:14])) + 1] != ""):
+                    SAHit2W += 1
+                    missed = False
+
+            if(missed):
+                SAMiss2W += 1
+                if (SASetI2W[2 * (int(addr[12:14],2))] != "" and SASetI2W[2 * (int(addr[12:14],2))+1] == ""):
+                    SASetI2W[2 * (int(addr[12:14],2)) + 1] = currTagDM
+                    print(SASetI2W[2 * (int(addr[12:14],2)) + 1])
+                elif (SALRU == 0):
+                    SASetI2W[2 * (int(addr[12]+addr[13],2)) + 1] = currTagDM
+                    print("SALRU index = " + str(2 * (int(addr[12]+addr[13],2))))
+                    SALRU = 1
+                else:
+                    SASetI2W[2 * (int(addr[12]+addr[13],2)) + 1] = currTagDM
+                    SALRU = 0
 
         elif (line[0:6] == "101011"):
             function = "sw"
