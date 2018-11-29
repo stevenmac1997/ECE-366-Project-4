@@ -41,7 +41,11 @@ def simulate(instr, output):
     forward = 0 #
     #forward_check_rs = [0,0,0,0,0,0,0] #forward check for rs
     #forward_check_rt = [0,0,0,0,0,0,0] #forward check for rt
-    forward_check_rd = [0,0,0,0,0,0,0,0] #forward check for rd
+    forward_check_rd = [0, 0, 0, 0, 0, 0, 0, 0] #forward check for rd
+    forward_check = False # Did a forward occur?
+    lu_check = False #Did lw_use occur?
+    cbc_check = False # Did compute_Branch_compare occur?
+    flush_check = False
     finished = False
     while(not(finished)):
 
@@ -50,38 +54,43 @@ def simulate(instr, output):
             #print(line)
             DIC += 1
             tot_cyc2 += 1
-            #forward[int(line[16:21],2)] = reg[rint(line[16:21],2)]
             if(line[0:6] == "000000"):
                 tot_cyc += 4
                 four_cyc += 1
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 rd = int(line[16:21],2)
+                if (forward_check_rd[rs] == Reg[rs] or forward_check_rd[rt] == Reg[rt]):
+                  forward += 1
+                  forward_check = True
+                else:
+                  forward_check = False
+                forward_check_rd [rd] = Reg[rd]
                 if ((rd_check == rs or rd_check == rt) and function == "lw"):
                   lw_use += 1
                   tot_cyc2 += 1
                   tot_delay += 1
+                  lu_check = True
                 else:
-                  ##rs_check = rs
-                  ##rt_check = rt
-                  rd_check = rd
+                  lu_check = False
+                rd_check = rd
                 if(line[26:32] == "100000"):
                   function = "add"
                   Reg[rd] = Reg[rs] + Reg[rt]
                   PC += 1
-                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str (rt))
+                  print (str(function) + " $" + str(rd) + ",$" + str(rs) + ",$" + str (rt))
                   function = "compare"
                 elif(line[26:32] == "100010"):
                   function = "sub"
                   Reg[rd]=Reg[rs]-Reg[rt]
                   PC += 1
-                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
+                  print (str(function) + " $" + str(rd) + ",$" + str(rs) + ",$" + str(rt))
                   function = "compare"
                 elif(line[26:32] == "100110"):
                   function = "xor"
                   Reg[rd]=Reg[rs]^Reg[rt]
                   PC += 1
-                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
+                  print (str(function) + " $" + str(rd) + ",$" + str(rs) + ",$" + str(rt))
                   function = "compare"
                 elif(line[26:32] == "101010"):
                   function = "slt"
@@ -90,21 +99,54 @@ def simulate(instr, output):
                   else:
                        Reg[rd]=0
                   PC += 1
-                  print (str(function) + " " + str(rd) + "," + str(rs) + "," + str(rt))
+                  print (str(function) + " $" + str(rd) + ",$" + str(rs) + ",$" + str(rt))
                   function = "compare"
+                print ("Cycles in Multi-Cycle: 4")
+                if (forward_check == True):
+                      print ("Forwarded?: $" + str (rd) + " was forwarded")
+                else:
+                      print ("Forwarded?: No")
+                if (lu_check == True):
+                    print ("lw-use Stall?: Yes")
+                else:
+                    print ("lw-use Stall?: No")
+                    
             elif(line[0:6] == "001000"):
-                function = "addi"
                 four_cyc += 1
                 tot_cyc += 4
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
+                if ((rd_check == rt) and function == "lw"):
+                  lw_use += 1
+                  tot_cyc2 += 1
+                  tot_delay += 1
+                  lu_check = True
+                else:
+                  lu_check = False
+                rd_check = rt
+                function = "addi"
+                if(forward_check_rd[rt] == Reg[rt]):
+                    forward += 1
+                    forward_check = True
+                else:
+                    forward_check = False
+                forward_check_rd[rt]=Reg[rt]
                 if(line[16] == "1"):
                     imm = imm - 65536
                 #print(imm)
                 Reg[rt]=Reg[rs]+imm
                 PC +=1
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+                print (str(function) + " $" + str(rs) + ",$" + str(rt) + "," + str(imm))
+                print ("Cycles in Multi-Cycle: 4")
+                if (forward_check == True):
+                      print ("Forwarded?: $" + str (rt) + " was forwarded")
+                else:
+                      print ("Forwarded?: No")
+                if (lu_check == True):
+                    print ("lw-use Stall?: Yes")
+                else:
+                    print ("lw-use Stall?: No")
                 function = "compare"
             elif(line[0:6] == "000100"):
                 three_cyc += 1
@@ -114,10 +156,11 @@ def simulate(instr, output):
                 imm = int(line[16:32],2)
                 if (function == "compare" and (rd_check == rs or rd_check == rt)):
                     compute_branch_compare += 1
+                    tot_delay += 1
                     tot_cyc2 += 1
-                #else:
-                    ##rs_check = rs
-                    ##rt_check = rt
+                    cbc_check = True
+                else:
+                    cbc_check = False
                 function = "beq"
                 if (line[16] == "1"):
                     imm = imm - 65536
@@ -126,13 +169,24 @@ def simulate(instr, output):
                     branch_taken_flush += 1
                     tot_cyc2 += 3
                     tot_delay += 3
+                    flush_check = True
                 else:
                     addThis = 1
+                    flush_check = False
                 if(addThis != 0):
                     PC += addThis
                 else:
                     finished = True
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+                print (str(function) + " $" + str(rs) + ",$" + str(rt) + "," + str(imm))
+                print ("Cycles in Multi-Cycle: 3")
+                if (cbc_check == True):
+                    print ("Compute-Branch Compare Hazard?: Yes")
+                else:
+                    print ("Compute-Branch Compare Hazard?: No")
+                if (flush_check == True):
+                    print ("Flush?: Yes")
+                else:
+                    print ("Flush?: No")
             elif(line[0:6] == "000101"):
                 
                 three_cyc += 1
@@ -142,10 +196,11 @@ def simulate(instr, output):
                 imm = int(line[16:32],2)
                 if (function == "compare" and (rd_check == rs or rd_check == rt)):
                     compute_branch_compare += 1
+                    tot_delay += 1
                     tot_cyc2 += 1
-                #else:
-                    ##rs_check = rs
-                    ##rt_check = rt
+                    cbc_check = True
+                else:
+                    cbc_check = False
                 function = "bne"
                 if(line[16] == "1"):
                     imm = imm - 65536
@@ -154,13 +209,24 @@ def simulate(instr, output):
                     branch_taken_flush += 1
                     tot_cyc2 += 3
                     tot_delay += 3
+                    flush_check = True
                 else:
                     addThis = 1
+                    flush_check = False
                 if (addThis != 0):
                     PC += addThis
                 else:
                     finished = True
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+                print (str(function) + " $" + str(rs) + ",$" + str(rt) + "," + str(imm))
+                print ("Cycles in Multi-Cycle: 3")
+                if (cbc_check == True):
+                    print ("Compute-Branch Compare Hazard?: Yes")
+                else:
+                    print ("Compute-Branch Compare Hazard?: No")
+                if (flush_check == True):
+                    print ("Flush?: Yes")
+                else:
+                    print ("Flush?: No")
             elif(line[0:6] == "100011"):
                 function = "lw"
                 five_cyc  += 1
@@ -168,6 +234,13 @@ def simulate(instr, output):
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
+                rd_check = rt
+                if (forward_check_rd [rs] == Reg[rs]):
+                  forward += 1
+                  forward_check = True
+                else:
+                  forwrad_check = False
+                forward_check_rd [rt] == Reg[rt]
                 if (line[16] == "1"):
                     imm = imm - 65536
                 imm = imm - 8192 #0x2000
@@ -175,7 +248,12 @@ def simulate(instr, output):
                 dummyA=0.25
                 Reg[rt]=Mem[round(Reg[rs]*dummyA)+imm]
                 PC +=1
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+                print (str(function) + " $" + str(rs) + "," + str(imm) + "($" + str(rt)+ ")")
+                print ("Cycles in Multi-Cycle: 5")
+                if (forward_check == True):
+                      print ("Forwarded?: $" + str (rt) + " was forwarded")
+                else:
+                      print ("Forwarded?: No")
             elif(line[0:6] == "101011"):
                 function = "sw"
                 four_cyc += 1
@@ -183,6 +261,12 @@ def simulate(instr, output):
                 rs = int(line[6:11],2)
                 rt = int(line[11:16],2)
                 imm = int(line[16:32],2)
+                if (forward_check_rd [rs] == Reg[rs]):
+                  forward += 1
+                  forward_check = True
+                else:
+                  forward_check = False
+                forward_check_rd [rt] = Reg[rt]
                 if (line[16] == "1"):
                     imm = imm - 65536
                 imm = imm - 8192 #0x2000
@@ -190,7 +274,12 @@ def simulate(instr, output):
 
                 Mem[round(Reg[rs]*dummyA)+imm]=Reg[rt]
                 PC +=1
-                print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
+                print (str(function) + " $" + str(rs) + "," + str(imm) + "($" + str(rt) + ")")
+                print ("Cycles in Multi-Cycle: 4")
+                if (forward_check == True):
+                      print ("Forwarded?: $" + str (rt) + " was forwarded")
+                else:
+                      print ("Forwarded?: No")
 
             print("\nReg: " + str(Reg))
             print("PC: " + str(PC + 1))
@@ -206,7 +295,7 @@ def simulate(instr, output):
             print("lw-use: " + str(lw_use))
             print("compute-branch compare: " + str(compute_branch_compare))
             print("branch taken flush: " + str(branch_taken_flush))
-            print("Total Delays: " +str(tot_delay))
+            print("Total Delays: " +str(tot_delay) + " Cycles")
             print("Total Cycles: " + str(tot_cyc2)) 
             print("")
     output.write("Reg: " + str(Reg))
