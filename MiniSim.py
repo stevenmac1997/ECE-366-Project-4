@@ -55,6 +55,7 @@ def simulate(instr, output):
             DIC += 1
             tot_cyc2 += 1
             if(line[0:6] == "000000"):
+                #R-TYPES
                 tot_cyc += 4
                 four_cyc += 1
                 rs = int(line[6:11],2)
@@ -148,6 +149,11 @@ def simulate(instr, output):
                 else:
                     print ("lw-use Stall?: No")
                 function = "compare"
+                
+            elif(line[0:32] == "00010000000000001111111111111111"):
+                finished = True
+                three_cyc += 1
+                tot_cyc += 3
             elif(line[0:6] == "000100"):
                 three_cyc += 1
                 tot_cyc += 3
@@ -167,8 +173,8 @@ def simulate(instr, output):
                 if(Reg[rs] == Reg[rt]):
                     addThis = imm + 1
                     branch_taken_flush += 1
-                    tot_cyc2 += 3
-                    tot_delay += 3
+                    tot_cyc2 += 1
+                    tot_delay += 1
                     flush_check = True
                 else:
                     addThis = 1
@@ -207,8 +213,8 @@ def simulate(instr, output):
                 if (Reg[rs] != Reg[rt]):
                     addThis = imm + 1
                     branch_taken_flush += 1
-                    tot_cyc2 += 3
-                    tot_delay += 3
+                    tot_cyc2 += 1
+                    tot_delay += 1
                     flush_check = True
                 else:
                     addThis = 1
@@ -250,10 +256,7 @@ def simulate(instr, output):
                 PC +=1
                 print (str(function) + " $" + str(rs) + "," + str(imm) + "($" + str(rt)+ ")")
                 print ("Cycles in Multi-Cycle: 5")
-                if (forward_check == True):
-                      print ("Forwarded?: $" + str (rt) + " was forwarded")
-                else:
-                      print ("Forwarded?: No")
+                
             elif(line[0:6] == "101011"):
                 function = "sw"
                 four_cyc += 1
@@ -280,24 +283,26 @@ def simulate(instr, output):
                       print ("Forwarded?: $" + str (rt) + " was forwarded")
                 else:
                       print ("Forwarded?: No")
+            print ("")
 
-            print("\nReg: " + str(Reg))
-            print("PC: " + str(PC + 1))
-            print("DIC: " + str(DIC))
-            print("Mem: " + str(Mem))
-            print("")
-            print("\nMulticycle Simulation Results: ")
-            print("Three Cycles: " + str(three_cyc))
-            print("Four Cycles: " + str(four_cyc))
-            print("Five Cycles: " + str(five_cyc))
-            print("Total Cycles: " + str(tot_cyc))
-            print("\nPipeline Simulation Results: ")
-            print("lw-use: " + str(lw_use))
-            print("compute-branch compare: " + str(compute_branch_compare))
-            print("branch taken flush: " + str(branch_taken_flush))
-            print("Total Delays: " +str(tot_delay) + " Cycles")
-            print("Total Cycles: " + str(tot_cyc2)) 
-            print("")
+    print("\nReg: " + str(Reg))
+    print("PC: " + str(PC + 1))
+    print("DIC: " + str(DIC))
+    #print("Mem: " + str(Mem))
+    print("")
+    print("\nMulticycle Simulation Results: ")
+    print("Three Cycles: " + str(three_cyc))
+    print("Four Cycles: " + str(four_cyc))
+    print("Five Cycles: " + str(five_cyc))
+    print("Total Cycles: " + str(tot_cyc))
+    print("\nPipeline Simulation Results: ")
+    print("Total Forwards: " + str(forward))
+    print("lw-use: " + str(lw_use))
+    print("compute-branch compare: " + str(compute_branch_compare))
+    print("branch taken flush: " + str(branch_taken_flush))
+    print("Total Delays: " +str(tot_delay) + " Cycles")
+    print("Total Cycles: " + str(tot_cyc2))
+    print("")
     output.write("Reg: " + str(Reg))
     output.write("\nPC : " + str(PC+1))
     output.write("\nDIC: " + str(DIC))
