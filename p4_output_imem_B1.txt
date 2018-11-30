@@ -1,0 +1,1350 @@
+ECE366 Fall 2018: MIPS Mini Assembler
+
+Members:
+Francis Paul Amadeo
+Steven Mac
+
+
+Reading in instruction file...
+...finished reading in instruction file
+
+Simulating...addi $0,$1,2
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+addi $0,$2,28
+Cycles in Multi-Cycle: 4
+Forwarded?: $2 was forwarded
+lw-use Stall?: No
+
+sw $2,0($1)
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+
+addi $2,$2,-4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $2,$0,4
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: No
+
+add $1,$1,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+sub $1,$0,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+addi $1,$1,3
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $3,$3,-7
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: No
+Flush?: Yes
+
+sw $2,0($1)
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+
+addi $2,$2,-4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $2,$0,4
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: No
+
+add $1,$1,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+sub $1,$0,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+addi $1,$1,3
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $3,$3,-7
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: No
+Flush?: Yes
+
+sw $2,0($1)
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+
+addi $2,$2,-4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $2,$0,4
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: No
+
+add $1,$1,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+sub $1,$0,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+addi $1,$1,3
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $3,$3,-7
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: No
+Flush?: Yes
+
+sw $2,0($1)
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+
+addi $2,$2,-4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $2,$0,4
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: No
+
+add $1,$1,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+sub $1,$0,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+addi $1,$1,3
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $3,$3,-7
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: No
+Flush?: Yes
+
+sw $2,0($1)
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+
+addi $2,$2,-4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $2,$0,4
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: No
+
+add $1,$1,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+sub $1,$0,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+addi $1,$1,3
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $3,$3,-7
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: No
+Flush?: Yes
+
+sw $2,0($1)
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+
+addi $2,$2,-4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $2,$0,4
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: No
+
+add $1,$1,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+sub $1,$0,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+addi $1,$1,3
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $3,$3,-7
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: No
+Flush?: Yes
+
+sw $2,0($1)
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+
+addi $2,$2,-4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+beq $2,$0,4
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $0,$6,40
+Cycles in Multi-Cycle: 4
+Forwarded?: $6 was forwarded
+lw-use Stall?: No
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000000100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 0
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000000
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 1
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000001000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 2
+Valid bit: 0
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000001
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 2
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000001100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000001
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 3
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000001000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 2
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000001
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 2
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000001100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000001
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 3
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000010000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 0
+Valid bit: 0
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000010
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 0
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: No
+
+add $5,$4,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $5 was forwarded
+lw-use Stall?: No
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000001100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000001
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 3
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000010000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000010
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 0
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000010100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000010
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 1
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000010000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000010
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 0
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000010100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000010
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 1
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000011000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 2
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000011
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 2
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000010100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000010
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 1
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000011000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 2
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000011
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 2
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000011100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000011
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 3
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000011000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 2
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000011
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 2
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000011100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000011
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 3
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000100000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000100
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 0
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000011100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000000
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 00100000000
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000011
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 3
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000000
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000100000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000100
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 0
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000100100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000100
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 1
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000100000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000100
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 0
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000100100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000100
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 1
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000101000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 2
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000101
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 2
+Block accessed: 1
+Valid bit: 0
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000100100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000100
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 1
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000101000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 2
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000101
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 2
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000101100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000101
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 3
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+add $4,$0,$0
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: No
+
+lw $2,4($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000101000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 2
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000101
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 2
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,8($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000101100
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 0
+Tag: 0010000000101
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 3
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+lw $2,12($1)
+Cycles in Multi-Cycle: 5
+Cache Access log:
+Memory Address: 0010000000110000
+Direct Mapped Cache, 2 blocks with size of 4 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Direct Mapped Cache, 4 block with size of 2 words: 
+Block accessed: 0
+Valid bit: 1
+Tag: 00100000001
+Fully-Associated Cache, 4 blocks with size of 2 words: 
+Block accessed: 3
+Valid bit: 1
+Tag: 0010000000110
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+Set accessed: 0
+Block accessed: 1
+Valid bit: 1
+Tag: 00100000001
+
+add $4,$4,$1
+Cycles in Multi-Cycle: 4
+Forwarded?: $4 was forwarded
+lw-use Stall?: Yes
+
+slt $1,$5,$4
+Cycles in Multi-Cycle: 4
+Forwarded?: $1 was forwarded
+lw-use Stall?: No
+
+beq $1,$0,1
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: Yes
+
+addi $2,$2,4
+Cycles in Multi-Cycle: 4
+Forwarded?: No
+lw-use Stall?: No
+
+bne $2,$6,-12
+Cycles in Multi-Cycle: 3
+Compute-Branch Compare Hazard?: Yes
+Flush?: No
+
+sw $0,0($5)
+Cycles in Multi-Cycle: 4
+Forwarded?: $5 was forwarde
+
+
+Reg: [0, 0, 40, 0, 0, 5, 40, 0]
+PC : 24
+DIC: 161
+Multicycle Simulation Results: 
+# Three Cycles: 34
+# Four Cycles: 97
+# Five Cycles: 30
+Total Cycles: 640
+Pipeline Simulation Results: 
+Total Forwards: 60
+lw-use: 30
+compute-branch compare: 27
+branch taken flush: 25
+Total Delays: 82 Cycles
+Total Cycles: 248
+
+Direct mapped cache, block size of 4 words, a total of 2 blocks:
+HITS:     26
+MISS:     4
+HIT Rate: 0.866666666667
+
+Direct mapped cache, block size of 2 words, a total of 4 blocks:
+HITS:     22
+MISS:     8
+HIT Rate: 0.733333333333
+
+Fully-Associated Cache, 4 blocks with size of 2 words:
+HITS:     15
+MISS:     0
+HIT Rate: 1.0
+
+2-way Set-Associative Cache, 4 sets / 8 blocks with size of 2 words:
+HITS:     17
+MISS:     13
+HIT Rate: 0.566666666667
+
+Simulation done

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 def hexToBin(line):
     newLine = 0
     for i in range(0, len(line)):
@@ -186,7 +188,6 @@ def simulate(instr, output):
             addr = int(round(Reg[rs] * 0.25)) + imm
             Reg[rt] = Mem[addr]
             PC += 1
-            print(str(addr))
             print (str(function) + " " + str(rs) + "," + str(rt) + "," + str(imm))
 
             # 3.)
@@ -197,9 +198,7 @@ def simulate(instr, output):
             # Add 0x2000 to the address and change it to binary
             if (line[16] == "1"):
                 imm += 65536
-            print(str(Reg[rs]) + "<- Reg[" + str(rs) + "]\timm ->" + str(imm))
             addr = Reg[rs] + imm + 8192
-            print(str(addr))
             addr = format(int(addr), "b")
             addr = "00" + addr
             print(addr)
@@ -208,6 +207,7 @@ def simulate(instr, output):
             currTagDM = addr[0:12]
             currTagFA = addr[0:12]
             # A.)
+            print("A")
             if (DMBlkI4W[int(addr[12])] == currTagDM):
                 DMHit4W += 1
             else:
@@ -215,12 +215,14 @@ def simulate(instr, output):
                 DMBlkI4W[int(addr[12])] = currTagDM
 
             # B.)
+            print("B")
             if (DMBlkI2W[int(addr[12:14], 2)] == currTagDM):
                 DMHit2W += 1
             else:
                 DMMiss2W += 1
                 DMBlkI2W[int(addr[12:14], 2)] = currTagDM
             # C.)
+            print("C")
             missed = True
             for i in range(0,4):
                 if (FABlkI2W[i] == currTagFA):
@@ -232,17 +234,23 @@ def simulate(instr, output):
                     break
             if (missed):
                 i = 0
+                print("Missed: ", end = '')
                 while(FABlkI2W[i] != ""):
                     i += 1
+                    print(i)
+
                 if(i<4):
                     FABlkI2W[i] = currTagFA
                     FALRU.append(i)
+                    print("i<4")
                 else:
                     FABlkI2W[FALRU[0]] = currTagFA
                     i = FALRU.pop(0)
                     FALRU.append(i)
+                    print("Everything has one")
 
             # D.)
+            print("D")
             missed = True
             if (SASetI2W[2 * (int(addr[12:14],2))] == currTagDM):
                 if(SASetI2W[int(addr[12:14], 2)] != ""):
